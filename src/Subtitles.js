@@ -3,7 +3,7 @@ import React from 'react';
 class Subtitles extends React.Component {
 	render() {
 		let currentLine;
-		if (this.props.performance.currentLine !== "") {
+		if (this.props.performance && this.props.performance.currentLine !== "") {
 			if (this.props.performance.currentSpeaker) {
                 if (this.props.performance.currentLine.includes("Firebase-read")) {
                     currentLine = (
