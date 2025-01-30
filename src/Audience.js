@@ -85,11 +85,15 @@ class Audience extends React.Component {
 					</div>
 				);
 			} else {
-				let r = null;
-				if (this.props.performance.rants) {
-					r = Object.keys(this.props.performance.rants).map((i) =>
-						<li key={i}>{this.props.performance.rants[i]}</li>
-					);
+				let rantContent = null;
+				if(this.props.settings.showRantContentToAudience){
+					let r = null;
+					if (this.props.performance.rants) {
+						r = Object.keys(this.props.performance.rants).map((i) =>
+							<li key={i}>{this.props.performance.rants[i]}</li>
+						);
+					}
+					rantContent = <><p aria-hidden="true">Current rant content</p><ul aria-hidden="true">{r}</ul></>
 				}
 				return (
 					<div>
@@ -97,8 +101,8 @@ class Audience extends React.Component {
 							<p tabIndex="0" role="alert" >{newText.trim()}</p>
 							<TextBox onSubmitted={this.handleFreeResponse}/>
 						</div>
-						<p aria-hidden="true">Current rant content</p>
-						<ul aria-hidden="true">{r}</ul>
+						
+						{rantContent}
 					</div>
 				);
 			}

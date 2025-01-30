@@ -23,15 +23,22 @@ export class TextBox extends React.Component {
   }
   handleSubmit(event) {
 	this.props.onSubmitted(this.state.value);
-	this.setState({value: ''});
+	this.setState({value: '',  submitted: true});
     event.preventDefault();
+	
+    setTimeout(() => {
+      this.setState({ submitted: false });
+    }, 1000);
   }
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<input type="text" value={this.state.value} onChange={this.handleChange} />
-                <input type="submit" value="Submit" />
-			</form>
+			<>
+				<form onSubmit={this.handleSubmit}>
+					<input type="text" value={this.state.value} onChange={this.handleChange} />
+					<input disabled={this.state.value.length===0} type="submit" value="Submit" />
+				</form>
+				<div className={this.state.submitted ?  "submitted-text" : ''}>{this.state.submitted && <>Submitted!</>}<br></br></div>
+			</>
 		);
 	}
 }

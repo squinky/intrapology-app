@@ -2,6 +2,7 @@
 	"performanceId": "hello-world",
 	"modPassword": "butts",
 	"title": "Hello World",
+	"showRantContentToAudience": true,
 	"callers": [ "Apple", "Banana" ],
 	"videoCallEmbedLink": "https://www.youtube.com/embed/jlyYqZqBDRw?si=sEtyIoaQfeWz5AOr",
 	"styles": {
