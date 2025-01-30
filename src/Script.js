@@ -9,6 +9,51 @@ class Script {
 	}
 	setScript(json, id, props) {
 		this.story = new Story(json);
+		this.seenChoices = new Set()
+
+		// Originally intended to listen to functions being called, but internal ink functions
+		// don't seem to cause this to fire.
+		this.story.variablesState.ObserveVariableChange((name,val)=>{
+			if(!this.rants){
+				return;
+			}
+	
+			const MAGIC_VALUE = 'Get-Random-Rant'
+			if(val.value !== MAGIC_VALUE){
+				return
+			}
+
+			const allRants = Object.values(this.rants);
+			if(!allRants.length){
+				return;
+			}
+
+			let finalChoice = null;
+			let numTries = 0;
+			const MAX_TRIES = 10
+			while(numTries < MAX_TRIES){
+				numTries +=1;
+				const choice = allRants[Math.floor(Math.random() * allRants.length)];
+				// Prevent an infinite loop, if someone submitted Get-Random-Rant for whatever reason
+				if(choice === MAGIC_VALUE){
+					continue
+				}
+				// This tries to ensure that each random draw is unique
+				if(this.seenChoices.has(choice)){
+					continue
+				}
+				finalChoice = choice;
+				break
+			}
+
+			if(finalChoice){
+				this.seenChoices.add(finalChoice)
+				this.story.variablesState.$(name, finalChoice)
+			} else {
+				this.story.variablesState.$(name, '')
+			}
+		})
+
 		if (!props) {
 			this.continue(id);
 		} else {
@@ -50,6 +95,9 @@ class Script {
 				break;
 			}
 		}
+
+		this.rants = rants;
+
 		const state = this.story.state.toJson();
 		firebase.database().ref(id).set({
 			currentLine: this.getLineText(line),
