@@ -34,10 +34,12 @@ class Script {
 			if (numChoices > 0) {
 				choices = {};
 				for (let i = 0; i < numChoices; i++) {
-					choices[i] = { text: null, speaker: null, votes: 0 };
-					let newText = this.story.currentChoices[i].text.replace('/', '');
+					choices[i] = { text: null, speaker: null, votes: 0, tags: null };
+					const currentChoice = this.story.currentChoices[i];
+					let newText = currentChoice.text.replace('/', '');
 					choices[i].text = this.getLineText(newText);
 					choices[i].speaker = this.getSpeaker(newText);
+					choices[i].tags = currentChoice.tags;
 				}
 			}
 		}

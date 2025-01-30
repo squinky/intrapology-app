@@ -73,7 +73,12 @@ class Audience extends React.Component {
 					<Button
 						key={i}
 						text={choices[i].text+" ("+choices[i].votes+" votes)"}
-						styleClass={Number(i) === Number(leading) ? "highlight" : null}
+						styleClass={
+							makeChoiceClassString(
+								Number(i) === Number(leading),
+								choices[i]
+							)
+						}
 						id={i}
 						onClicked={this.handleChoice}
 						selected={this.state.selected === i} />
@@ -110,6 +115,23 @@ class Audience extends React.Component {
 			);
 		}
 	}
+}
+
+const classTagPattern = /^CLASS:\s*(\S*)/;
+const leadingHighlightClass = 'highlight';
+function makeChoiceClassString(isLeadingChoice, choiceData) {
+	const maybeHighlightClass = isLeadingChoice ? leadingHighlightClass : null;
+	if (choiceData.tags) {
+		for (const tag of choiceData.tags) {
+			const maybeMatch = tag.match(classTagPattern);
+			if (maybeMatch) {
+				const className = maybeMatch[1];
+				const maybeHighlightClassStr = maybeHighlightClass ? '' : maybeHighlightClass + ' ';
+				return maybeHighlightClassStr + className;
+			}
+		}
+	}
+	return maybeHighlightClass;
 }
 
 export default Audience;
