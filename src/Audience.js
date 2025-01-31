@@ -85,6 +85,12 @@ class Audience extends React.Component {
 					</div>
 				);
 			} else {
+
+				let freeResponseBox = null;
+				if(this.props.performance.audience.startsWith('@')){
+					freeResponseBox = <><TextBox onSubmitted={this.handleFreeResponse}/></>
+				}
+
 				let r = null;
 				if (this.props.performance.rants) {
 					r = Object.keys(this.props.performance.rants).map((i) =>
@@ -95,7 +101,7 @@ class Audience extends React.Component {
 					<div>
 						<div className="bubble">
 							<p tabIndex="0" role="alert" >{newText.trim()}</p>
-							<TextBox onSubmitted={this.handleFreeResponse}/>
+							{freeResponseBox}
 						</div>
 						<p aria-hidden="true">Current rant content</p>
 						<ul aria-hidden="true">{r}</ul>

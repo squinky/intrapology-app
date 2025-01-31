@@ -20,7 +20,7 @@
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: start;
 }
 
 .App-interact {
@@ -174,6 +174,23 @@
 	height: 0;
 	padding-bottom: 56.25%;
 }
+
+.choice-list li{
+	display:flex;
+	gap:2rem;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.choice-list li span{
+	flex-grow: 1;
+	flex-shrink: 0;
+}
+.choice-list li button{
+	width: 13rem;
+	margin: 0;
+}
+
 
 .video {
 	position: absolute;

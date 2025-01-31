@@ -15,6 +15,9 @@ class Moderator extends React.Component {
 	handleContinueButton = (id) => {
 		script.continue(this.props.settings.performanceId, this.props.performance);
 	}
+	handlePickSpecificButton = (idx)=>{
+		script.pickChoice(idx, this.props.settings.performanceId);
+	}
 	handlePickButton = (id) => {
 		let pickMe = 0;
 		const choices = Object.values(this.props.performance.choices);
@@ -86,12 +89,17 @@ class Moderator extends React.Component {
 			}
 			if (this.props.performance.choices) {
 				const choices = this.props.performance.choices;
-				const choiceList = Object.keys(choices).map((i) =>
-					<li key={i} className={choices[i].speaker}>{choices[i].text+" ("+choices[i].votes+" votes)"}</li>
+				const choiceKeys = Object.keys(choices);
+				const choiceList = choiceKeys.map((i) =>
+					<li key={i} className={choices[i].speaker}>
+						<span>{choices[i].text+" ("+choices[i].votes+" votes)"}</span>
+						{choiceKeys.length > 1 ? <Button text="Force Choice"  id={`pick-${i}`} onClicked={() => this.handlePickSpecificButton(i)} /> : null } 
+					</li>
 				);
 				currentChoices = (
-					<ol>{choiceList}</ol>
+					<ol className="choice-list">{choiceList}</ol>
 				);
+
 				if (!continueButton) {
 					continueButton = (
 						// This shows when the button will end voting and select a branch of the script
@@ -107,16 +115,20 @@ class Moderator extends React.Component {
 			}
 			return (
 				<div id="mod">
+					<h2>Performance controls</h2>
+					{continueButton}
+
                     <h2>Current line</h2>
 					{currentLine}
                     <h2>Current choices</h2>
 					{currentChoices}
-                    <h2>Performance controls</h2>
-					{continueButton}
-					<Button text="Start over" id="end" onClicked={this.handleRestartButton} />
+                   
                     <h2>Current rant content</h2>
                     <ul>{r}</ul>
                     <Button text="Reset rant" onClicked={this.handleRantButton} />
+
+					<h2>Danger Zone</h2>
+					<Button text="Start over" id="end" onClicked={this.handleRestartButton} />
 				</div>
 			);
 		} else {
